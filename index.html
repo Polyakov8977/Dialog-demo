@@ -1,83 +1,211 @@
 
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Диалог — займы между людьми</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Диалог — финансовая платформа</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#f2f5f9;color:#26374d;font-family:Arial,sans-serif}
-header{background:white;padding:20px;color:#4f7095;font-size:27px;font-weight:bold}
-main{max-width:850px;margin:auto;padding:20px}
-.hero,.panel{background:white;border-radius:18px;padding:24px;margin-bottom:18px}
-.hero{background:#e6eef7}
-h1{font-size:27px}
-button{background:#507399;color:white;border:0;border-radius:10px;padding:13px;margin:5px 4px 5px 0;cursor:pointer}
-input,select{width:100%;padding:12px;margin:7px 0;border:1px solid #ccd6e2;border-radius:8px}
-.item{padding:15px;border-bottom:1px solid #ddd}
-small{color:#66788e}
+body{margin:0;background:#f4f5ff;color:#202447;font-family:Arial,sans-serif}
+header{background:white;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 3px 15px #0001}
+.logo{font-size:25px;font-weight:900;color:#5754ed}
+button{border:0;cursor:pointer;font-weight:bold}
+.btn{background:linear-gradient(120deg,#5655f5,#a44fe5);color:white;padding:14px 19px;border-radius:13px}
+main{max-width:1050px;margin:auto;padding:18px}
+.hero{background:linear-gradient(125deg,#19245b,#5d49dc,#ad51e4);border-radius:25px;color:white;padding:40px 25px}
+.hero h1{font-size:clamp(35px,7vw,60px);line-height:1.1;margin:20px 0}
+.hero p{line-height:1.6;color:#e9e5ff}
+.tag{display:inline-block;background:#ffffff25;border-radius:20px;padding:9px 14px;font-size:12px}
+.white{background:white;color:#5854e9}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:25px}
+.stat{background:#ffffff20;padding:14px;border-radius:15px}
+.stat b{display:block;font-size:23px}
+.stat small{font-size:11px}
+h2{margin-top:35px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
+.card{background:white;border-radius:20px;padding:22px;box-shadow:0 6px 20px #2222}
+.card h3{margin:10px 0}
+.card p{color:#858ba5;line-height:1.5}
+.amount{font-size:30px;font-weight:900;margin:16px 0}
+.pill{background:#e6f8ee;color:#18865b;border-radius:20px;padding:7px 12px;font-size:12px;display:inline-block}
+.card .btn{width:100%;margin-top:10px}
+form{background:white;padding:22px;border-radius:20px;max-width:600px}
+label{display:block;margin:16px 0 7px;font-weight:bold}
+input,textarea{width:100%;padding:14px;border:1px solid #dce0f1;border-radius:12px;font:inherit}
+textarea{min-height:85px}
+form .btn{margin-top:20px}
+nav{display:flex;gap:8px;overflow:auto;margin:25px 0}
+nav button{padding:12px 16px;border-radius:12px;background:white;color:#5754ed;white-space:nowrap}
+nav button.active{background:#5754ed;color:white}
+.notice{margin-top:30px;padding:17px;background:#fff7e4;border-radius:15px;font-size:13px;color:#826126}
+footer{text-align:center;padding:30px;color:#9297ad;font-size:12px}
+.hidden{display:none}
 </style>
 </head>
 <body>
-<header>Диалог · Демо</header>
+<header>
+<div class="logo">✦ Диалог.</div>
+<button class="btn" onclick="page('account')">Кабинет</button>
+</header>
+
 <main>
 <section class="hero">
-<h1>Деньги в долг — напрямую между людьми</h1>
-<p>Размещайте заявки и предлагайте свои условия займа.</p>
-<button onclick="show('list')">Посмотреть заявки</button>
-<button onclick="show('create')">Создать заявку</button>
+<span class="tag">✦ Финансовая платформа</span>
+<h1>Деньги ближе,<br>чем кажется.</h1>
+<p>Создавайте заявки, находите предложения и обсуждайте финансовые возможности.</p>
+<button class="btn white" onclick="page('create')">Создать заявку →</button>
+<div class="stats">
+<div class="stat"><b id="count">3</b><small>Заявки</small></div>
+<div class="stat"><b id="offers">0</b><small>Предложения</small></div>
+<div class="stat"><b>24/7</b><small>Демо-доступ</small></div>
+</div>
 </section>
+
 <nav>
-<button onclick="show('list')">Заявки</button>
-<button onclick="show('create')">Новая заявка</button>
-<button onclick="show('account')">Личный кабинет</button>
+<button onclick="page('home')" id="tab-home">Главная</button>
+<button onclick="page('loans')" id="tab-loans">Заявки</button>
+<button onclick="page('create')" id="tab-create">+ Создать</button>
+<button onclick="page('account')" id="tab-account">Кабинет</button>
 </nav>
-<section class="panel" id="list">
-<h2>Заявки заёмщиков</h2>
-<div id="items"></div>
+
+<section id="home">
+<h2>Почему «Диалог»?</h2>
+<div class="grid">
+<div class="card"><h3>⚡ Быстро</h3><p>Создайте заявку за несколько минут.</p></div>
+<div class="card"><h3>💬 Удобно</h3><p>Предлагайте свои условия и обсуждайте варианты.</p></div>
+<div class="card"><h3>✨ Красиво</h3><p>Современный интерфейс для телефона и компьютера.</p></div>
+</div>
+<h2>Актуальные заявки</h2>
+<div id="preview" class="grid"></div>
 </section>
-<section class="panel" id="create" hidden>
+
+<section id="loans" class="hidden">
+<h2>Все заявки</h2>
+<p>Выберите интересующую заявку.</p>
+<div id="list" class="grid"></div>
+</section>
+
+<section id="create" class="hidden">
 <h2>Новая заявка</h2>
-<input id="amount" type="number" placeholder="Сумма в рублях">
-<input id="days" type="number" placeholder="Срок в днях">
-<button onclick="add()">Разместить заявку</button>
+<form onsubmit="addLoan(event)">
+<label>Сумма займа, ₽</label>
+<input id="amount" type="number" min="100" required placeholder="Например, 15000">
+<label>Срок, дней</label>
+<input id="days" type="number" min="1" required placeholder="Например, 30">
+<label>Для чего нужны деньги?</label>
+<textarea id="purpose" required placeholder="Расскажите о цели займа"></textarea>
+<button class="btn" type="submit">Опубликовать заявку</button>
+</form>
 </section>
-<section class="panel" id="account" hidden>
+
+<section id="account" class="hidden">
 <h2>Личный кабинет</h2>
-<p>Демонстрационный пользователь</p>
-<p>Здесь появятся сделки, история возвратов и комиссии.</p>
+<div class="card">
+<h3>👋 Добро пожаловать!</h3>
+<p>Ваши данные сохраняются в этом браузере.</p>
+<p>Созданных заявок: <b id="myCount">0</b></p>
+<p>Сделанных предложений: <b id="myOffers">0</b></p>
+<button class="btn" onclick="page('create')">Новая заявка</button>
+</div>
 </section>
-<p><small>Демонстрация. Реальные переводы и договоры отключены.</small></p>
+
+<div class="notice">
+🔒 Демонстрационная версия. Реальные займы, переводы денег и договоры здесь не оформляются.
+</div>
 </main>
+
+<footer>Диалог © 2026 · Финансовая платформа</footer>
+
 <script>
-let requests=JSON.parse(localStorage.getItem('dialogRequests')||'[]');
-function show(id){
-document.querySelectorAll('section.panel').forEach(e=>e.hidden=true);
-document.getElementById(id).hidden=false;
+const defaults=[
+{amount:7000,days:10,purpose:"На срочные расходы"},
+{amount:25000,days:30,purpose:"На ремонт квартиры"},
+{amount:50000,days:90,purpose:"На развитие проекта"}
+];
+let loans=JSON.parse(localStorage.getItem("dialog_loans")||"null")||defaults;
+let mine=Number(localStorage.getItem("dialog_mine")||0);
+let offers=Number(localStorage.getItem("dialog_offers")||0);
+
+function save(){
+localStorage.setItem("dialog_loans",JSON.stringify(loans));
+localStorage.setItem("dialog_mine",mine);
+localStorage.setItem("dialog_offers",offers);
 }
-function render(){
-document.getElementById('items').innerHTML=requests.length
-?requests.map((r,i)=>'<div class="item"><b>'+r.amount.toLocaleString('ru-RU')+' ₽</b> · '+r.days+' дней <button onclick="offer('+i+')">Предложить условия</button></div>').join('')
-:'Пока нет заявок. Создайте первую!';
+
+function page(name){
+["home","loans","create","account"].forEach(id=>{
+document.getElementById(id).classList.toggle("hidden",id!==name);
+document.getElementById("tab-"+id).classList.toggle("active",id===name);
+});
+window.scrollTo({top:300,behavior:"smooth"});
 }
-function add(){
-let amount=Number(document.getElementById('amount').value);
-let days=Number(document.getElementById('days').value);
-if(!Number.isSafeInteger(amount)||!Number.isSafeInteger(days)||amount<=0||days<=0){alert('Укажите корректную сумму и срок');return;}
-requests.push({amount,days});
-localStorage.setItem('dialogRequests',JSON.stringify(requests));
-render();show('list');
+
+function card(item){
+let el=document.createElement("div");
+el.className="card";
+let status=document.createElement("span");
+status.className="pill";
+status.textContent="● Открыта";
+let amount=document.createElement("div");
+amount.className="amount";
+amount.textContent=Number(item.amount).toLocaleString("ru-RU")+" ₽";
+let purpose=document.createElement("p");
+purpose.textContent=item.purpose;
+let days=document.createElement("p");
+days.textContent="⏱ Срок: "+item.days+" дней";
+let btn=document.createElement("button");
+btn.className="btn";
+btn.textContent="Предложить условия";
+btn.onclick=()=>{
+let rate=prompt("Введите годовую ставку в процентах:");
+if(rate===null)return;
+let n=Number(rate);
+if(!rate.trim()||!Number.isFinite(n)||n<0||n>100){
+alert("Введите ставку от 0 до 100");
+return;
 }
-function offer(i){
-let amount=prompt('Предложите свою сумму в рублях',requests[i].amount);
-if(amount===null)return;
-let n=Number(amount);
-if(!Number.isSafeInteger(n)||n<=0){alert('Некорректная сумма');return;}
-alert('Тестовое предложение на '+n+' ₽ создано. Реальная сделка не заключается.');
-}
+offers++;
+save();
 render();
+alert("Предложение сохранено в этом браузере!");
+};
+el.append(status,amount,purpose,days,btn);
+return el;
+}
+
+function render(){
+let list=document.getElementById("list");
+let preview=document.getElementById("preview");
+list.replaceChildren();
+preview.replaceChildren();
+loans.forEach((item,i)=>{
+list.appendChild(card(item));
+if(i<3)preview.appendChild(card(item));
+});
+document.getElementById("count").textContent=loans.length;
+document.getElementById("offers").textContent=offers;
+document.getElementById("myCount").textContent=mine;
+document.getElementById("myOffers").textContent=offers;
+}
+
+function addLoan(e){
+e.preventDefault();
+let amount=Number(document.getElementById("amount").value);
+let days=Number(document.getElementById("days").value);
+let purpose=document.getElementById("purpose").value.trim();
+if(amount<100||days<1||!purpose)return;
+loans.unshift({amount,days,purpose});
+mine++;
+save();
+e.target.reset();
+render();
+page("loans");
+alert("Заявка успешно создана!");
+}
+
+render();
+page("home");
 </script>
 </body>
 </html>
