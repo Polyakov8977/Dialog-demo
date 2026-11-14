@@ -1,1 +1,83 @@
 
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Диалог — займы между людьми</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f2f5f9;color:#26374d;font-family:Arial,sans-serif}
+header{background:white;padding:20px;color:#4f7095;font-size:27px;font-weight:bold}
+main{max-width:850px;margin:auto;padding:20px}
+.hero,.panel{background:white;border-radius:18px;padding:24px;margin-bottom:18px}
+.hero{background:#e6eef7}
+h1{font-size:27px}
+button{background:#507399;color:white;border:0;border-radius:10px;padding:13px;margin:5px 4px 5px 0;cursor:pointer}
+input,select{width:100%;padding:12px;margin:7px 0;border:1px solid #ccd6e2;border-radius:8px}
+.item{padding:15px;border-bottom:1px solid #ddd}
+small{color:#66788e}
+</style>
+</head>
+<body>
+<header>Диалог · Демо</header>
+<main>
+<section class="hero">
+<h1>Деньги в долг — напрямую между людьми</h1>
+<p>Размещайте заявки и предлагайте свои условия займа.</p>
+<button onclick="show('list')">Посмотреть заявки</button>
+<button onclick="show('create')">Создать заявку</button>
+</section>
+<nav>
+<button onclick="show('list')">Заявки</button>
+<button onclick="show('create')">Новая заявка</button>
+<button onclick="show('account')">Личный кабинет</button>
+</nav>
+<section class="panel" id="list">
+<h2>Заявки заёмщиков</h2>
+<div id="items"></div>
+</section>
+<section class="panel" id="create" hidden>
+<h2>Новая заявка</h2>
+<input id="amount" type="number" placeholder="Сумма в рублях">
+<input id="days" type="number" placeholder="Срок в днях">
+<button onclick="add()">Разместить заявку</button>
+</section>
+<section class="panel" id="account" hidden>
+<h2>Личный кабинет</h2>
+<p>Демонстрационный пользователь</p>
+<p>Здесь появятся сделки, история возвратов и комиссии.</p>
+</section>
+<p><small>Демонстрация. Реальные переводы и договоры отключены.</small></p>
+</main>
+<script>
+let requests=JSON.parse(localStorage.getItem('dialogRequests')||'[]');
+function show(id){
+document.querySelectorAll('section.panel').forEach(e=>e.hidden=true);
+document.getElementById(id).hidden=false;
+}
+function render(){
+document.getElementById('items').innerHTML=requests.length
+?requests.map((r,i)=>'<div class="item"><b>'+r.amount.toLocaleString('ru-RU')+' ₽</b> · '+r.days+' дней <button onclick="offer('+i+')">Предложить условия</button></div>').join('')
+:'Пока нет заявок. Создайте первую!';
+}
+function add(){
+let amount=Number(document.getElementById('amount').value);
+let days=Number(document.getElementById('days').value);
+if(!Number.isSafeInteger(amount)||!Number.isSafeInteger(days)||amount<=0||days<=0){alert('Укажите корректную сумму и срок');return;}
+requests.push({amount,days});
+localStorage.setItem('dialogRequests',JSON.stringify(requests));
+render();show('list');
+}
+function offer(i){
+let amount=prompt('Предложите свою сумму в рублях',requests[i].amount);
+if(amount===null)return;
+let n=Number(amount);
+if(!Number.isSafeInteger(n)||n<=0){alert('Некорректная сумма');return;}
+alert('Тестовое предложение на '+n+' ₽ создано. Реальная сделка не заключается.');
+}
+render();
+</script>
+</body>
+</html>
